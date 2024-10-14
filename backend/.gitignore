@@ -1,0 +1,42 @@
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Environment variables
+.env
+
+# Build output
+dist/
+build/
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+
+# Coverage directory used by tools like istanbul
+coverage/
+
+# VS Code settings
+.vscode/
+
+# macOS system files
+.DS_Store
+
+# npm
+package-lock.json
+yarn.lock
+
+# JetBrains IDEs
+.idea/
+
+# Optional npm cache directory
+.npm/
+
+# Other
+*.tgz
