@@ -29,7 +29,6 @@ const createCourse = async (req, res) => {
     });
   }
 
- 
   const validation = courseSchema.safeParse(req.body);
   if (!validation.success) {
     return res.status(400).json({
@@ -104,18 +103,18 @@ const deleteCourse = async (req, res) => {
 
 const getAllCoursesByAdmin = async (req, res) => {
   const AdminId = req.userDetails._id;
-try {
-  const getAllMyCourses = await courseModel.find({creator: AdminId})
-  res.status(200).json({
-    msg: "Retrieved all courses successfully", 
-    courses: getAllMyCourses
-  });
-} catch (error) {
-  console.log("error : ", error);
-  return res.status(400).json({ error: error.message });
-}
+  try {
+    const getAllMyCourses = await courseModel.find({ creator: AdminId });
+    res.status(200).json({
+      msg: "Retrieved all courses successfully",
+      courses: getAllMyCourses,
+    });
+  } catch (error) {
+    console.log("error : ", error);
+    return res.status(400).json({ error: error.message });
+  }
+};
 
-}
 const getPreveiwCourses = async (req, res) => {
   try {
     const allCourses = await courseModel.find();
@@ -206,24 +205,23 @@ const allPurchasesCourse = async (req, res) => {
   try {
     const getAllPurchasedCourse = await purchaseModel.findOne({ userId });
 
+    const allCourses = [];
 
-const allCourses = []
+    if (!getAllPurchasedCourse) {
+      return res.status(200).json({
+        msg: "You don't have any purchased course.",
+        allCourses,
+      });
+    }
 
-if(!getAllPurchasedCourse){
-  return  res.status(200).json({
-    msg: "You don't have any purchased course.",
-allCourses
-  });
-}
-
-for (let i = 0; i < getAllPurchasedCourse.courses.length; i++) {
-  const courseId = getAllPurchasedCourse.courses[i]
-const courseDetails = await courseModel.findById(courseId)
-allCourses.push(courseDetails)
-}
+    for (let i = 0; i < getAllPurchasedCourse.courses.length; i++) {
+      const courseId = getAllPurchasedCourse.courses[i];
+      const courseDetails = await courseModel.findById(courseId);
+      allCourses.push(courseDetails);
+    }
     res.status(200).json({
       msg: "course purchased successfully",
-allCourses
+      allCourses,
     });
   } catch (error) {
     console.log("error : ", error);
@@ -273,13 +271,13 @@ const addVideoToCourse = async (req, res) => {
       });
     }
     const filePath = req.file?.path;
-    const uploadImage = await uploadOnCloudinary(filePath);
+    const uploadVideo = await uploadOnCloudinary(filePath);
     course.videos.push({
       title,
       decsription: req.body?.decsription || "",
       video: {
-        public_id: uploadImage.public_id,
-        secure_url: uploadImage.secure_url,
+        public_id: uploadVideo.public_id,
+        secure_url: uploadVideo.secure_url,
       },
     });
 
@@ -400,6 +398,70 @@ const totalAmountOfCourse = async (req, res, next) => {
   }
 };
 
+const accessPurchasedCourseContent = async (req, res) => {
+  const courseId = req.params.courseId;
+  if (!courseId) {
+    return res.status(400).json({
+      msg: "Please provide a course ID.",
+    });
+  }
+  try {
+    const course = await courseModel.findById(courseId);
+    if (!course) {
+      return res.status(404).json({
+        msg: "Course does not exist.",
+      });
+    }
+
+    const userId = req.userDetails._id;
+    const purchasedCourse = await purchaseModel.findOne({ userId });
+    
+    if (!purchasedCourse) {
+      return res.status(403).json({
+        message:
+          "Access denied: Please purchase the course to access its content.",
+      });
+    }
+
+    const allCoursesIdOfPurchasedByUser = purchasedCourse?.courses;
+
+    const matchCourse = allCoursesIdOfPurchasedByUser.find((eachCourseId) => {
+      const isMatch = eachCourseId.toString() === courseId;
+      return isMatch;
+    });
+    if (!matchCourse) {
+      return res.status(403).json({
+        message:
+          "Access denied: Please purchase the course to access its content.",
+      });
+    }
+    const courseDeatils = await courseModel.findById(matchCourse);
+
+    let message;
+    let courseContentExists = false 
+    if (!courseDeatils?.videos || courseDeatils?.videos.length == 0){
+      message = "Course does not contain content"
+    }else {
+      message  = 'Course content fetch successfully!'
+      courseContentExists = true 
+    }
+
+    res.status(200).json({
+    message,
+    courseContentLength: courseContentExists  === true  ? 1 : 0,
+      courseContents: courseDeatils?.videos 
+    });
+
+
+  } catch (error) {
+    console.log("error : ", error);
+    return res.status(400).json({ error: error.message });
+  }
+};
+
+
+
+
 module.exports = {
   createCourse,
   deleteCourse,
@@ -411,5 +473,6 @@ module.exports = {
   deleteVideoFromCourse,
   eachCourseDescription,
   totalAmountOfCourse,
-  getAllCoursesByAdmin
+  getAllCoursesByAdmin,
+  accessPurchasedCourseContent,
 };

@@ -52,19 +52,19 @@ const Signin = () => {
       if (response?.payload?.msg) {
         navigate(`/${apiCall}/signin`);
         navigate("/");
-      } else {
-        toast({
-          description: response?.payload || "Signin failed",
-          className:
-            "bg-red-700 text-white font-semibold p-4 rounded-lg shadow-lg text-center max-w-md mx-auto",
-        });
       }
     } catch (error) {
+      console.log(error)
+      toast({
+        description:  "Signin failed",
+        className:
+          "bg-red-700 text-white font-semibold p-4 rounded-lg shadow-lg text-center max-w-md mx-auto",
+      });
     } finally {
       setIsLoading(false);
     }
   };
-  
+
   return (
     <div className=" w-[100vw] h-[100vh]  flex items-center justify-center bg-[#F0FFF0]">
       <div className=" min-w-96 rounded bg-[rgb(255,255,255)]  border border-gray-300 shadow-[rgba(17,_17,_26,_0.1)_0px_0px_16px] py-3 px-4 ">

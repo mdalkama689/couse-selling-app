@@ -54,9 +54,9 @@ const AdminCourseCard = ({ courses }) => {
   };
 
   const navigateToAddVideo = (courseDetails) => {
-    // navigate(`/${courseDetails?._id}/add/video`, {
-    //   state: { courseId: courseDetails?._id },
-    // });
+    navigate(`/${courseDetails?._id}/add/content`, {
+      state: { courseId: courseDetails?._id },
+    });
   };
 
   return (
@@ -72,7 +72,9 @@ const AdminCourseCard = ({ courses }) => {
                 </CardTitle>
               </CardHeader>
               <CardFooter className="flex flex-col justify-between items-center gap-0">
-                <Button className="w-[90%] bg-blue-500 text-white hover:bg-blue-600 transition duration-300">
+                <Button
+                onClick={() => navigateToAddVideo(course)}
+                className="w-[90%] bg-blue-500 text-white hover:bg-blue-600 transition duration-300">
                   Add Content
                 </Button>
 

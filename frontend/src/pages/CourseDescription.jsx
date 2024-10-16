@@ -66,7 +66,7 @@ const CourseDescription = () => {
         setCourseDetails(fetchCourse?.data?.course);
       } catch (error) {
         toast({
-          description: response?.payload || "Signin failed",
+          description: "Failed to fetch course details!",
           className:
             "bg-red-700 text-white font-semibold p-4 rounded-lg shadow-lg text-center max-w-md mx-auto",
         });

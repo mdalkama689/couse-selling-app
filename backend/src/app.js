@@ -20,4 +20,8 @@ app.use(cors({
 app.use('/api/v1/user', userRoutes)
 app.use('/api/v1/admin', adminRoutes)
 app.use('/api/v1/course', courseRoutes)
+app.use('*', (req, res) => {
+    res.status(404).send('<p>OOPS! Page does not exist</p>');
+});
+
 module.exports  = app 

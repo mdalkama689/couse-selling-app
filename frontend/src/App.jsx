@@ -10,9 +10,10 @@ import Profile from "./components/Profile";
 import Purchase from "./components/Purchase";
 import YourCourses from "./components/YourCourses";
 import CreateCourse from "./pages/CreateCourse";
-import AddVideo from "./pages/AddVideo";
 import RequireAuth from "./components/Auth/RequireAuth";
 import Denied from "./pages/Denied";
+import ViewCourseContent from "./components/ViewCourseContent";
+import ManageVideo from "./components/ManageVideo";
 
 const App = () => {
   return (
@@ -33,12 +34,13 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/purchases" element={<Purchase />} />
           <Route path="/setting/me" element={<Profile />} />
+          <Route path="/:courseId/show/content" element={<ViewCourseContent />} />
         </Route>
 
         <Route element={<RequireAuth allowedRoles={["admin"]} />}>
           <Route path="/your/courses" element={<YourCourses />} />
           <Route path="/add/course" element={<CreateCourse />} />
-          <Route path="/:courseId/add/video" element={<AddVideo />} />
+          <Route path="/:courseId/add/content" element={<ManageVideo />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

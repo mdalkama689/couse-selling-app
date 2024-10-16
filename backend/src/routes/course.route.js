@@ -1,7 +1,7 @@
 const express = require("express");
 const adminAuthMiddleware = require("../middlewares/admin.middleware");
 const upload = require("../middlewares/multer.middleware");
-const { createCourse, deleteCourse, getPreveiwCourses, getAllCourses, purchaseCourse, allPurchasesCourse, addVideoToCourse, deleteVideoFromCourse, eachCourseDescription, totalAmountOfCourse, getAllCoursesByAdmin} = require("../controllers/course.controller");
+const { createCourse, deleteCourse, getPreveiwCourses, getAllCourses, purchaseCourse, allPurchasesCourse, addVideoToCourse, deleteVideoFromCourse, eachCourseDescription, totalAmountOfCourse, getAllCoursesByAdmin, accessPurchasedCourseContent} = require("../controllers/course.controller");
 
 const userOrAdminAuthMiddleware = require("../middlewares/userOrAdmin.middleware");
 
@@ -20,4 +20,6 @@ router.get('/purchases', userOrAdminAuthMiddleware  , allPurchasesCourse)
 router.post('/add/video/:courseId', adminAuthMiddleware , upload.single('video'), addVideoToCourse)
 router.delete('/:courseId/delete/video/:videoId', adminAuthMiddleware , deleteVideoFromCourse)
 router.get('/description/:courseId', eachCourseDescription)
+router.get('/:courseId/get/Video',userOrAdminAuthMiddleware, accessPurchasedCourseContent)
+
 module.exports = router

@@ -33,24 +33,15 @@ const Header = () => {
          </Link>
        </div>
         )}
-        {isLoggedIn ? (
+        {isLoggedIn && (
           <Link to="/purchases">
             {" "}
             <CgProfile size={40} />
           </Link>
-        ) : (
-          <div className="hidden md:flex gap-3">
-            <Button className="bg-blue-500 hover:bg-blue-600">
-              <Link to="/user/signup">Signup</Link>
-            </Button>
-            <Button className="bg-blue-500 hover:bg-blue-600">
-              <Link to="/user/signin">Signin</Link>
-            </Button>
-          </div>
-        )}
+        ) }
       </div>
 
-      <div className="md:hidden ">Navbar</div>
+  
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import axiosInstance from "@/config/axiosInstance";
+import { useToast } from "@/hooks/use-toast";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -7,6 +8,8 @@ const initialState = {
   role: localStorage.getItem('role') ||  ''
 };
 
+
+
 const signUpAccount = createAsyncThunk("/auth/signup", async (data) => {
   try {
     const response = await axiosInstance.post(`/${data[0]}/signup`, data[1]);
@@ -14,8 +17,8 @@ const signUpAccount = createAsyncThunk("/auth/signup", async (data) => {
     return response.data;
   } catch (error) {
     console.log("error : ", error?.response?.data?.error);
+return error?.response?.data?.error 
 
-    return error?.response?.data?.error
   }
 });
 
@@ -25,11 +28,9 @@ const signInAccount = createAsyncThunk('/auth/signin', async (data) => {
 
         return response.data 
     } catch (error) {
-        console.log("error : ", error?.response?.data?.error);
-
-        return error?.response?.data?.error
-    }
-})
+      console.log("error : ", error?.response?.data?.error);
+    return error?.response?.data?.error
+    }})
 
 const logOutAccount = createAsyncThunk('/auth/logout', async (data) => {
 

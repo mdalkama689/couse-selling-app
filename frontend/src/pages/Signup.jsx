@@ -52,14 +52,14 @@ const Signup = () => {
 
       if (response?.payload?.msg) {
         navigate(`/${apiCall}/signin`);
-      } else {
-        toast({
-          description: response?.payload || "Signup failed",
-          className:
-            "bg-red-700 text-white font-semibold p-4 rounded-lg shadow-lg text-center max-w-md mx-auto",
-        });
       }
     } catch (error) {
+      toast({
+        description:  "Signup failed",
+        className:
+          "bg-red-700 text-white font-semibold p-4 rounded-lg shadow-lg text-center max-w-md mx-auto",
+      });
+    
     } finally {
       setIsLoading(false);
     }

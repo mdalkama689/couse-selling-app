@@ -2,8 +2,15 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 
+import { useNavigate } from "react-router-dom";
+
 const PurchaseCourseCard = ({ courses }) => {
 
+  const navigate = useNavigate()
+
+  const navigateToCourseContent = (course) => {
+navigate(`/${course?._id}/show/content`)
+  }
   return (
     <>
       { courses?.length > 0 ? (
@@ -18,7 +25,9 @@ const PurchaseCourseCard = ({ courses }) => {
               </CardHeader>
 
               <CardFooter className="flex justify-between ">
-                <Button className="w-[90%] m-auto">View</Button>
+                <Button
+                onClick={() => navigateToCourseContent(course)}
+                className="w-[90%] m-auto">View</Button>
               </CardFooter>
             </Card>
           ))}
